@@ -13,9 +13,11 @@ public abstract class VectorParamPartSpecImpl<T extends Comparable<T>> implement
     }
 
     @AutoValue.Builder
-    public abstract static class Builder<T extends Comparable<T>> {
+    public abstract static class Builder<T extends Comparable<T>> implements CommonBuilders.BaseSchemaNodeBuilder {
+        @Override
         public abstract Builder<T> setKey(String newKey);
 
+        @Override
         public abstract Builder<T> setLabel(String newLabel);
 
         public abstract Builder<T> setPath(String newPath);

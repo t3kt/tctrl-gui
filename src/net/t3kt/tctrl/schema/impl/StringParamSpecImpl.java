@@ -15,21 +15,37 @@ public abstract class StringParamSpecImpl implements StringParamSpec {
     }
 
     @AutoValue.Builder
-    public abstract static class Builder {
+    public abstract static class Builder implements CommonBuilders.ParamSpecBuilder {
+        @Override
         public abstract Builder setKey(String newKey);
 
+        @Override
         public abstract Builder setLabel(String newLabel);
 
+        @Override
         public abstract Builder setPath(String newPath);
 
+        @Override
         public abstract Builder setGroup(String newGroup);
 
+        @Override
         public abstract Builder setTags(ImmutableSet<String> newTags);
 
+        abstract ImmutableSet.Builder<String> tagsBuilder();
+
+        @Override
+        public Builder addTag(String tag) {
+            tagsBuilder().add(tag);
+            return this;
+        }
+
+        @Override
         public abstract Builder setType(ParamType newType);
 
+        @Override
         public abstract Builder setStyle(String newStyle);
 
+        @Override
         public abstract Builder setOtherType(String newOtherType);
 
         public abstract Builder setDefaultValue(String newDefaultValue);

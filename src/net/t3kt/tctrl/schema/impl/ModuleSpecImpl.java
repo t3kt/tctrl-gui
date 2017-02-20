@@ -17,19 +17,24 @@ public abstract class ModuleSpecImpl implements ModuleSpec {
     }
 
     @AutoValue.Builder
-    public abstract static class Builder {
+    public abstract static class Builder implements CommonBuilders.BaseParentNodeBuilder {
         public abstract Builder setModuleType(String newModuleType);
 
+        @Override
         public abstract Builder setKey(String newKey);
 
+        @Override
         public abstract Builder setLabel(String newLabel);
 
+        @Override
         public abstract Builder setPath(String newPath);
 
+        @Override
         public abstract Builder setChildren(ImmutableList<ModuleSpec> newChildren);
 
         abstract ImmutableList.Builder<ModuleSpec> childrenBuilder();
 
+        @Override
         public Builder addChild(ModuleSpec child) {
             childrenBuilder().add(child);
             return this;
@@ -44,9 +49,19 @@ public abstract class ModuleSpecImpl implements ModuleSpec {
             return this;
         }
 
+        @Override
         public abstract Builder setGroup(String newGroup);
 
+        @Override
         public abstract Builder setTags(ImmutableSet<String> newTags);
+
+        abstract ImmutableSet.Builder<String> tagsBuilder();
+
+        @Override
+        public Builder addTag(String tag) {
+            tagsBuilder().add(tag);
+            return this;
+        }
 
         public abstract ModuleSpecImpl build();
     }
