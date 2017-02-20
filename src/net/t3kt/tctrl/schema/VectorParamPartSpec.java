@@ -4,13 +4,13 @@ import com.google.common.collect.Range;
 
 import javax.annotation.Nullable;
 
-public interface VectorParamPartSpec<T extends Comparable> extends BaseSchemaNode {
-    String getPath();
+public interface VectorParamPartSpec<T extends Comparable<T>> extends BaseSchemaNode {
+    String path();
 
     @Nullable
-    Range<T> getLimitRange();
+    Range<T> limitRange();
 
-    Range<T> getNormRange();
+    Range<T> normRange();
 
-    T getDefaultValue();
+    T defaultValue();
 }

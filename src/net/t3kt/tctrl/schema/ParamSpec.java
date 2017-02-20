@@ -6,12 +6,10 @@ import javax.annotation.Nullable;
 
 public interface ParamSpec extends SchemaNode {
 
-    ParamType getType();
+    ParamType type();
 
-    String getStyle();
-
-    String getPath();
+    String style();
 
     @Nullable
-    String getOtherType();
+    String otherType();
 }

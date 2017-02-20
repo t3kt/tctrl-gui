@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public interface ModuleSpec extends BaseParentNode {
     @Nullable
-    String getModuleType();
+    String moduleType();
 
-    ImmutableList<ParamSpec> getParams();
+    ImmutableList<ParamSpec> params();
 }

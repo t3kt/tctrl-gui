@@ -4,9 +4,11 @@ import com.google.common.collect.Range;
 
 import javax.annotation.Nullable;
 
-public interface SingleNumberParamSpec<T extends Comparable> extends SingleValueParamSpec<T> {
-    @Nullable
-    Range<T> getLimitRange();
+public interface SingleNumberParamSpec<T extends Comparable<T>> extends ParamSpec {
+    T defaultValue();
 
-    Range<T> getNormRange();
+    @Nullable
+    Range<T> limitRange();
+
+    Range<T> normRange();
 }

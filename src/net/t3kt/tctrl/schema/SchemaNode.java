@@ -3,11 +3,11 @@ package net.t3kt.tctrl.schema;
 import com.google.common.collect.ImmutableSet;
 
 public interface SchemaNode extends BaseSchemaNode {
-    String getPath();
+    String path();
 
-    String getGroup();
+    String group();
 
-    ImmutableSet<String> getTags();
+    ImmutableSet<String> tags();
 
     // TODO: properties
 }

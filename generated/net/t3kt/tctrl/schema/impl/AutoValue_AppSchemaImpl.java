@@ -4,7 +4,6 @@ package net.t3kt.tctrl.schema.impl;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import javax.annotation.Generated;
-import javax.annotation.Nullable;
 import net.t3kt.tctrl.schema.ModuleSpec;
 
 @Generated("com.google.auto.value.processor.AutoValueProcessor")
@@ -13,55 +12,53 @@ import net.t3kt.tctrl.schema.ModuleSpec;
   private final String key;
   private final String label;
   private final String path;
-  private final ImmutableList<ModuleSpec> children;
   private final String group;
   private final ImmutableSet<String> tags;
+  private final ImmutableList<ModuleSpec> children;
 
   private AutoValue_AppSchemaImpl(
       String key,
       String label,
-      @Nullable String path,
-      ImmutableList<ModuleSpec> children,
-      @Nullable String group,
-      ImmutableSet<String> tags) {
+      String path,
+      String group,
+      ImmutableSet<String> tags,
+      ImmutableList<ModuleSpec> children) {
     this.key = key;
     this.label = label;
     this.path = path;
-    this.children = children;
     this.group = group;
     this.tags = tags;
+    this.children = children;
   }
 
   @Override
-  public String getKey() {
+  public String key() {
     return key;
   }
 
   @Override
-  public String getLabel() {
+  public String label() {
     return label;
   }
 
-  @Nullable
   @Override
-  public String getPath() {
+  public String path() {
     return path;
   }
 
   @Override
-  public ImmutableList<ModuleSpec> getChildren() {
-    return children;
-  }
-
-  @Nullable
-  @Override
-  public String getGroup() {
+  public String group() {
     return group;
   }
 
   @Override
-  public ImmutableSet<String> getTags() {
+  public ImmutableSet<String> tags() {
     return tags;
+  }
+
+  @Override
+  public ImmutableList<ModuleSpec> children() {
+    return children;
   }
 
   @Override
@@ -70,9 +67,9 @@ import net.t3kt.tctrl.schema.ModuleSpec;
         + "key=" + key + ", "
         + "label=" + label + ", "
         + "path=" + path + ", "
-        + "children=" + children + ", "
         + "group=" + group + ", "
-        + "tags=" + tags
+        + "tags=" + tags + ", "
+        + "children=" + children
         + "}";
   }
 
@@ -83,12 +80,12 @@ import net.t3kt.tctrl.schema.ModuleSpec;
     }
     if (o instanceof AppSchemaImpl) {
       AppSchemaImpl that = (AppSchemaImpl) o;
-      return (this.key.equals(that.getKey()))
-           && (this.label.equals(that.getLabel()))
-           && ((this.path == null) ? (that.getPath() == null) : this.path.equals(that.getPath()))
-           && (this.children.equals(that.getChildren()))
-           && ((this.group == null) ? (that.getGroup() == null) : this.group.equals(that.getGroup()))
-           && (this.tags.equals(that.getTags()));
+      return (this.key.equals(that.key()))
+           && (this.label.equals(that.label()))
+           && (this.path.equals(that.path()))
+           && (this.group.equals(that.group()))
+           && (this.tags.equals(that.tags()))
+           && (this.children.equals(that.children()));
     }
     return false;
   }
@@ -101,13 +98,13 @@ import net.t3kt.tctrl.schema.ModuleSpec;
     h *= 1000003;
     h ^= this.label.hashCode();
     h *= 1000003;
-    h ^= (path == null) ? 0 : this.path.hashCode();
+    h ^= this.path.hashCode();
     h *= 1000003;
-    h ^= this.children.hashCode();
-    h *= 1000003;
-    h ^= (group == null) ? 0 : this.group.hashCode();
+    h ^= this.group.hashCode();
     h *= 1000003;
     h ^= this.tags.hashCode();
+    h *= 1000003;
+    h ^= this.children.hashCode();
     return h;
   }
 
@@ -115,18 +112,18 @@ import net.t3kt.tctrl.schema.ModuleSpec;
     private String key;
     private String label;
     private String path;
-    private ImmutableList<ModuleSpec> children;
     private String group;
     private ImmutableSet<String> tags;
+    private ImmutableList<ModuleSpec> children;
     Builder() {
     }
     private Builder(AppSchemaImpl source) {
-      this.key = source.getKey();
-      this.label = source.getLabel();
-      this.path = source.getPath();
-      this.children = source.getChildren();
-      this.group = source.getGroup();
-      this.tags = source.getTags();
+      this.key = source.key();
+      this.label = source.label();
+      this.path = source.path();
+      this.group = source.group();
+      this.tags = source.tags();
+      this.children = source.children();
     }
     @Override
     public AppSchemaImpl.Builder setKey(String key) {
@@ -139,23 +136,23 @@ import net.t3kt.tctrl.schema.ModuleSpec;
       return this;
     }
     @Override
-    public AppSchemaImpl.Builder setPath(@Nullable String path) {
+    public AppSchemaImpl.Builder setPath(String path) {
       this.path = path;
       return this;
     }
     @Override
-    public AppSchemaImpl.Builder setChildren(ImmutableList<ModuleSpec> children) {
-      this.children = children;
-      return this;
-    }
-    @Override
-    public AppSchemaImpl.Builder setGroup(@Nullable String group) {
+    public AppSchemaImpl.Builder setGroup(String group) {
       this.group = group;
       return this;
     }
     @Override
     public AppSchemaImpl.Builder setTags(ImmutableSet<String> tags) {
       this.tags = tags;
+      return this;
+    }
+    @Override
+    public AppSchemaImpl.Builder setChildren(ImmutableList<ModuleSpec> children) {
+      this.children = children;
       return this;
     }
     @Override
@@ -167,11 +164,17 @@ import net.t3kt.tctrl.schema.ModuleSpec;
       if (this.label == null) {
         missing += " label";
       }
-      if (this.children == null) {
-        missing += " children";
+      if (this.path == null) {
+        missing += " path";
+      }
+      if (this.group == null) {
+        missing += " group";
       }
       if (this.tags == null) {
         missing += " tags";
+      }
+      if (this.children == null) {
+        missing += " children";
       }
       if (!missing.isEmpty()) {
         throw new IllegalStateException("Missing required properties:" + missing);
@@ -180,9 +183,9 @@ import net.t3kt.tctrl.schema.ModuleSpec;
           this.key,
           this.label,
           this.path,
-          this.children,
           this.group,
-          this.tags);
+          this.tags,
+          this.children);
     }
   }
 
