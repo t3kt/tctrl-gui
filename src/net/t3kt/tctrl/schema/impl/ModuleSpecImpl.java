@@ -28,7 +28,21 @@ public abstract class ModuleSpecImpl implements ModuleSpec {
 
         public abstract Builder setChildren(ImmutableList<ModuleSpec> newChildren);
 
+        abstract ImmutableList.Builder<ModuleSpec> childrenBuilder();
+
+        public Builder addChild(ModuleSpec child) {
+            childrenBuilder().add(child);
+            return this;
+        }
+
         public abstract Builder setParams(ImmutableList<ParamSpec> newParams);
+
+        abstract ImmutableList.Builder<ParamSpec> paramsBuilder();
+
+        public Builder addParam(ParamSpec param) {
+            paramsBuilder().add(param);
+            return this;
+        }
 
         public abstract Builder setGroup(String newGroup);
 

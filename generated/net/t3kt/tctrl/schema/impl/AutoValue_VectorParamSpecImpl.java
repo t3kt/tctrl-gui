@@ -13,31 +13,31 @@ import net.t3kt.tctrl.schema.VectorParamPartSpec;
 
   private final String key;
   private final String label;
+  private final String path;
   private final String group;
   private final ImmutableSet<String> tags;
   private final ParamType type;
   private final String style;
-  private final String path;
   private final String otherType;
   private final ImmutableList<VectorParamPartSpec<T>> parts;
 
   private AutoValue_VectorParamSpecImpl(
       String key,
       String label,
+      String path,
       String group,
       ImmutableSet<String> tags,
       ParamType type,
       String style,
-      String path,
       @Nullable String otherType,
       ImmutableList<VectorParamPartSpec<T>> parts) {
     this.key = key;
     this.label = label;
+    this.path = path;
     this.group = group;
     this.tags = tags;
     this.type = type;
     this.style = style;
-    this.path = path;
     this.otherType = otherType;
     this.parts = parts;
   }
@@ -50,6 +50,11 @@ import net.t3kt.tctrl.schema.VectorParamPartSpec;
   @Override
   public String label() {
     return label;
+  }
+
+  @Override
+  public String path() {
+    return path;
   }
 
   @Override
@@ -72,11 +77,6 @@ import net.t3kt.tctrl.schema.VectorParamPartSpec;
     return style;
   }
 
-  @Override
-  public String path() {
-    return path;
-  }
-
   @Nullable
   @Override
   public String otherType() {
@@ -93,11 +93,11 @@ import net.t3kt.tctrl.schema.VectorParamPartSpec;
     return "VectorParamSpecImpl{"
         + "key=" + key + ", "
         + "label=" + label + ", "
+        + "path=" + path + ", "
         + "group=" + group + ", "
         + "tags=" + tags + ", "
         + "type=" + type + ", "
         + "style=" + style + ", "
-        + "path=" + path + ", "
         + "otherType=" + otherType + ", "
         + "parts=" + parts
         + "}";
@@ -112,11 +112,11 @@ import net.t3kt.tctrl.schema.VectorParamPartSpec;
       VectorParamSpecImpl<?> that = (VectorParamSpecImpl<?>) o;
       return (this.key.equals(that.key()))
            && (this.label.equals(that.label()))
+           && (this.path.equals(that.path()))
            && (this.group.equals(that.group()))
            && (this.tags.equals(that.tags()))
            && (this.type.equals(that.type()))
            && (this.style.equals(that.style()))
-           && (this.path.equals(that.path()))
            && ((this.otherType == null) ? (that.otherType() == null) : this.otherType.equals(that.otherType()))
            && (this.parts.equals(that.parts()));
     }
@@ -131,6 +131,8 @@ import net.t3kt.tctrl.schema.VectorParamPartSpec;
     h *= 1000003;
     h ^= this.label.hashCode();
     h *= 1000003;
+    h ^= this.path.hashCode();
+    h *= 1000003;
     h ^= this.group.hashCode();
     h *= 1000003;
     h ^= this.tags.hashCode();
@@ -138,8 +140,6 @@ import net.t3kt.tctrl.schema.VectorParamPartSpec;
     h ^= this.type.hashCode();
     h *= 1000003;
     h ^= this.style.hashCode();
-    h *= 1000003;
-    h ^= this.path.hashCode();
     h *= 1000003;
     h ^= (otherType == null) ? 0 : this.otherType.hashCode();
     h *= 1000003;
@@ -150,23 +150,25 @@ import net.t3kt.tctrl.schema.VectorParamPartSpec;
   static final class Builder<T extends Comparable<T>> extends VectorParamSpecImpl.Builder<T> {
     private String key;
     private String label;
+    private String path;
     private String group;
     private ImmutableSet<String> tags;
     private ParamType type;
     private String style;
-    private String path;
     private String otherType;
+    private ImmutableList.Builder<VectorParamPartSpec<T>> partsBuilder$;
     private ImmutableList<VectorParamPartSpec<T>> parts;
     Builder() {
+      this.parts = ImmutableList.of();
     }
     private Builder(VectorParamSpecImpl<T> source) {
       this.key = source.key();
       this.label = source.label();
+      this.path = source.path();
       this.group = source.group();
       this.tags = source.tags();
       this.type = source.type();
       this.style = source.style();
-      this.path = source.path();
       this.otherType = source.otherType();
       this.parts = source.parts();
     }
@@ -178,6 +180,11 @@ import net.t3kt.tctrl.schema.VectorParamPartSpec;
     @Override
     public VectorParamSpecImpl.Builder<T> setLabel(String label) {
       this.label = label;
+      return this;
+    }
+    @Override
+    public VectorParamSpecImpl.Builder<T> setPath(String path) {
+      this.path = path;
       return this;
     }
     @Override
@@ -201,28 +208,45 @@ import net.t3kt.tctrl.schema.VectorParamPartSpec;
       return this;
     }
     @Override
-    public VectorParamSpecImpl.Builder<T> setPath(String path) {
-      this.path = path;
-      return this;
-    }
-    @Override
     public VectorParamSpecImpl.Builder<T> setOtherType(@Nullable String otherType) {
       this.otherType = otherType;
       return this;
     }
     @Override
     public VectorParamSpecImpl.Builder<T> setParts(ImmutableList<VectorParamPartSpec<T>> parts) {
+      if (partsBuilder$ != null) {
+        throw new IllegalStateException("Cannot set parts after calling partsBuilder()");
+      }
       this.parts = parts;
       return this;
     }
     @Override
+    public ImmutableList.Builder<VectorParamPartSpec<T>> partsBuilder() {
+      if (partsBuilder$ == null) {
+        if (parts == null) {
+          partsBuilder$ = ImmutableList.builder();
+        } else {
+          partsBuilder$ = ImmutableList.builder();
+          partsBuilder$.addAll(parts);
+          parts = null;
+        }
+      }
+      return partsBuilder$;
+    }
+    @Override
     public VectorParamSpecImpl<T> build() {
+      if (partsBuilder$ != null) {
+        this.parts = partsBuilder$.build();
+      }
       String missing = "";
       if (this.key == null) {
         missing += " key";
       }
       if (this.label == null) {
         missing += " label";
+      }
+      if (this.path == null) {
+        missing += " path";
       }
       if (this.group == null) {
         missing += " group";
@@ -236,23 +260,17 @@ import net.t3kt.tctrl.schema.VectorParamPartSpec;
       if (this.style == null) {
         missing += " style";
       }
-      if (this.path == null) {
-        missing += " path";
-      }
-      if (this.parts == null) {
-        missing += " parts";
-      }
       if (!missing.isEmpty()) {
         throw new IllegalStateException("Missing required properties:" + missing);
       }
       return new AutoValue_VectorParamSpecImpl<T>(
           this.key,
           this.label,
+          this.path,
           this.group,
           this.tags,
           this.type,
           this.style,
-          this.path,
           this.otherType,
           this.parts);
     }

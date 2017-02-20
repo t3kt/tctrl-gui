@@ -114,8 +114,10 @@ import net.t3kt.tctrl.schema.ModuleSpec;
     private String path;
     private String group;
     private ImmutableSet<String> tags;
+    private ImmutableList.Builder<ModuleSpec> childrenBuilder$;
     private ImmutableList<ModuleSpec> children;
     Builder() {
+      this.children = ImmutableList.of();
     }
     private Builder(AppSchemaImpl source) {
       this.key = source.key();
@@ -152,11 +154,30 @@ import net.t3kt.tctrl.schema.ModuleSpec;
     }
     @Override
     public AppSchemaImpl.Builder setChildren(ImmutableList<ModuleSpec> children) {
+      if (childrenBuilder$ != null) {
+        throw new IllegalStateException("Cannot set children after calling childrenBuilder()");
+      }
       this.children = children;
       return this;
     }
     @Override
+    public ImmutableList.Builder<ModuleSpec> childrenBuilder() {
+      if (childrenBuilder$ == null) {
+        if (children == null) {
+          childrenBuilder$ = ImmutableList.builder();
+        } else {
+          childrenBuilder$ = ImmutableList.builder();
+          childrenBuilder$.addAll(children);
+          children = null;
+        }
+      }
+      return childrenBuilder$;
+    }
+    @Override
     public AppSchemaImpl build() {
+      if (childrenBuilder$ != null) {
+        this.children = childrenBuilder$.build();
+      }
       String missing = "";
       if (this.key == null) {
         missing += " key";
@@ -172,9 +193,6 @@ import net.t3kt.tctrl.schema.ModuleSpec;
       }
       if (this.tags == null) {
         missing += " tags";
-      }
-      if (this.children == null) {
-        missing += " children";
       }
       if (!missing.isEmpty()) {
         throw new IllegalStateException("Missing required properties:" + missing);

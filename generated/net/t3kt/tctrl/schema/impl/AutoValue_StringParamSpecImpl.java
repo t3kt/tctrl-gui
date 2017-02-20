@@ -13,11 +13,11 @@ import net.t3kt.tctrl.schema.ParamType;
 
   private final String key;
   private final String label;
+  private final String path;
   private final String group;
   private final ImmutableSet<String> tags;
   private final ParamType type;
   private final String style;
-  private final String path;
   private final String otherType;
   private final String defaultValue;
   private final ImmutableList<ParamOption> options;
@@ -25,21 +25,21 @@ import net.t3kt.tctrl.schema.ParamType;
   private AutoValue_StringParamSpecImpl(
       String key,
       String label,
+      String path,
       String group,
       ImmutableSet<String> tags,
       ParamType type,
       String style,
-      String path,
       @Nullable String otherType,
       String defaultValue,
       ImmutableList<ParamOption> options) {
     this.key = key;
     this.label = label;
+    this.path = path;
     this.group = group;
     this.tags = tags;
     this.type = type;
     this.style = style;
-    this.path = path;
     this.otherType = otherType;
     this.defaultValue = defaultValue;
     this.options = options;
@@ -53,6 +53,11 @@ import net.t3kt.tctrl.schema.ParamType;
   @Override
   public String label() {
     return label;
+  }
+
+  @Override
+  public String path() {
+    return path;
   }
 
   @Override
@@ -73,11 +78,6 @@ import net.t3kt.tctrl.schema.ParamType;
   @Override
   public String style() {
     return style;
-  }
-
-  @Override
-  public String path() {
-    return path;
   }
 
   @Nullable
@@ -101,11 +101,11 @@ import net.t3kt.tctrl.schema.ParamType;
     return "StringParamSpecImpl{"
         + "key=" + key + ", "
         + "label=" + label + ", "
+        + "path=" + path + ", "
         + "group=" + group + ", "
         + "tags=" + tags + ", "
         + "type=" + type + ", "
         + "style=" + style + ", "
-        + "path=" + path + ", "
         + "otherType=" + otherType + ", "
         + "defaultValue=" + defaultValue + ", "
         + "options=" + options
@@ -121,11 +121,11 @@ import net.t3kt.tctrl.schema.ParamType;
       StringParamSpecImpl that = (StringParamSpecImpl) o;
       return (this.key.equals(that.key()))
            && (this.label.equals(that.label()))
+           && (this.path.equals(that.path()))
            && (this.group.equals(that.group()))
            && (this.tags.equals(that.tags()))
            && (this.type.equals(that.type()))
            && (this.style.equals(that.style()))
-           && (this.path.equals(that.path()))
            && ((this.otherType == null) ? (that.otherType() == null) : this.otherType.equals(that.otherType()))
            && (this.defaultValue.equals(that.defaultValue()))
            && (this.options.equals(that.options()));
@@ -141,6 +141,8 @@ import net.t3kt.tctrl.schema.ParamType;
     h *= 1000003;
     h ^= this.label.hashCode();
     h *= 1000003;
+    h ^= this.path.hashCode();
+    h *= 1000003;
     h ^= this.group.hashCode();
     h *= 1000003;
     h ^= this.tags.hashCode();
@@ -148,8 +150,6 @@ import net.t3kt.tctrl.schema.ParamType;
     h ^= this.type.hashCode();
     h *= 1000003;
     h ^= this.style.hashCode();
-    h *= 1000003;
-    h ^= this.path.hashCode();
     h *= 1000003;
     h ^= (otherType == null) ? 0 : this.otherType.hashCode();
     h *= 1000003;
@@ -162,11 +162,11 @@ import net.t3kt.tctrl.schema.ParamType;
   static final class Builder extends StringParamSpecImpl.Builder {
     private String key;
     private String label;
+    private String path;
     private String group;
     private ImmutableSet<String> tags;
     private ParamType type;
     private String style;
-    private String path;
     private String otherType;
     private String defaultValue;
     private ImmutableList<ParamOption> options;
@@ -175,11 +175,11 @@ import net.t3kt.tctrl.schema.ParamType;
     private Builder(StringParamSpecImpl source) {
       this.key = source.key();
       this.label = source.label();
+      this.path = source.path();
       this.group = source.group();
       this.tags = source.tags();
       this.type = source.type();
       this.style = source.style();
-      this.path = source.path();
       this.otherType = source.otherType();
       this.defaultValue = source.defaultValue();
       this.options = source.options();
@@ -192,6 +192,11 @@ import net.t3kt.tctrl.schema.ParamType;
     @Override
     public StringParamSpecImpl.Builder setLabel(String label) {
       this.label = label;
+      return this;
+    }
+    @Override
+    public StringParamSpecImpl.Builder setPath(String path) {
+      this.path = path;
       return this;
     }
     @Override
@@ -212,11 +217,6 @@ import net.t3kt.tctrl.schema.ParamType;
     @Override
     public StringParamSpecImpl.Builder setStyle(String style) {
       this.style = style;
-      return this;
-    }
-    @Override
-    public StringParamSpecImpl.Builder setPath(String path) {
-      this.path = path;
       return this;
     }
     @Override
@@ -243,6 +243,9 @@ import net.t3kt.tctrl.schema.ParamType;
       if (this.label == null) {
         missing += " label";
       }
+      if (this.path == null) {
+        missing += " path";
+      }
       if (this.group == null) {
         missing += " group";
       }
@@ -254,9 +257,6 @@ import net.t3kt.tctrl.schema.ParamType;
       }
       if (this.style == null) {
         missing += " style";
-      }
-      if (this.path == null) {
-        missing += " path";
       }
       if (this.defaultValue == null) {
         missing += " defaultValue";
@@ -270,11 +270,11 @@ import net.t3kt.tctrl.schema.ParamType;
       return new AutoValue_StringParamSpecImpl(
           this.key,
           this.label,
+          this.path,
           this.group,
           this.tags,
           this.type,
           this.style,
-          this.path,
           this.otherType,
           this.defaultValue,
           this.options);

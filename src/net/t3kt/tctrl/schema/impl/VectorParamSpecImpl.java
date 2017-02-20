@@ -34,6 +34,13 @@ public abstract class VectorParamSpecImpl<T extends Comparable<T>> implements Ve
 
         public abstract Builder<T> setParts(ImmutableList<VectorParamPartSpec<T>> newParts);
 
+        abstract ImmutableList.Builder<VectorParamPartSpec<T>> partsBuilder();
+
+        public Builder<T> addPart(VectorParamPartSpec<T> part) {
+            partsBuilder().add(part);
+            return this;
+        }
+
         public abstract VectorParamSpecImpl<T> build();
     }
 }

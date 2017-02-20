@@ -26,6 +26,13 @@ public abstract class AppSchemaImpl implements AppSchema {
 
         public abstract Builder setChildren(ImmutableList<ModuleSpec> newChildren);
 
+        abstract ImmutableList.Builder<ModuleSpec> childrenBuilder();
+
+        public Builder addChild(ModuleSpec child) {
+            childrenBuilder().add(child);
+            return this;
+        }
+
         public abstract Builder setGroup(String newGroup);
 
         public abstract Builder setTags(ImmutableSet<String> newTags);
