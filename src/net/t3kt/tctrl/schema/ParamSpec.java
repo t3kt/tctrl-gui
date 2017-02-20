@@ -1,32 +1,13 @@
 package net.t3kt.tctrl.schema;
 
-public class ParamSpec extends SchemaNode {
-    private final ParamType type;
-    private String path;
-    private String otherType;
+import javax.annotation.Nullable;
 
-    ParamSpec(String key, String label, ParamType type) {
-        super(key, label);
-        this.type = type;
-    }
+public interface ParamSpec extends SchemaNode {
 
-    public ParamType getType() {
-        return type;
-    }
+    ParamType getType();
 
-    public String getPath() {
-        return path;
-    }
+    String getPath();
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getOtherType() {
-        return otherType;
-    }
-
-    public void setOtherType(String otherType) {
-        this.otherType = otherType;
-    }
+    @Nullable
+    String getOtherType();
 }
