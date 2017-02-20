@@ -15,7 +15,10 @@
     </wildcardResourcePatterns>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true">
-        <processorPath useClasspath="true" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$PROJECT_DIR$/lib/auto-value-1.4-SNAPSHOT.jar" />
+        </processorPath>
       </profile>
     </annotationProcessing>
   </component>
