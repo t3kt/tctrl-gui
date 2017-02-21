@@ -18,68 +18,36 @@ class ParamParser<B extends CommonBuilders.ParamSpecBuilder> {
         return parser.parse(obj);
     }
 
-    static ParamParser<?> fromObject(JsonObject obj) {
+    private static ParamParser<?> fromObject(JsonObject obj) {
         String key = ParserUtil.getRequiredString(obj, "key");
         String typeStr = ParserUtil.getRequiredString(obj, "type");
         ParamType type = ParamType.parseType(typeStr).orElse(null);
 
         if (type == null) {
-            return forOther(key, typeStr);
+            type = ParamType.OTHER;
         }
         switch (type) {
             case TRIGGER:
-                return forTrigger(key);
+                return new ParamParser<>(ParamSpecImpl.builder(key, ParamType.TRIGGER));
             case BOOL:
-                return forBoolean(key);
+                return new BoolParamParser(SingleValueParamSpecImpl.builder(key, ParamType.BOOL));
             case STRING:
             case MENU:
-                return forString(key, type);
+                return new StringParamParser(StringParamSpecImpl.builder(key, type));
             case INT:
-                return forInteger(key);
+                return new SingleNumberParamParser<>(INTEGER_HANDLER, SingleNumberParamSpecImpl.builder(key, ParamType.INT));
             case FLOAT:
-                return forFloat(key);
+                return new SingleNumberParamParser<>(FLOAT_HANDLER, SingleNumberParamSpecImpl.builder(key, ParamType.FLOAT));
             case IVEC:
-                return forIntegerVector(key);
+                return new VectorParamParser<>(INTEGER_HANDLER, VectorParamSpecImpl.builder(key, ParamType.IVEC));
             case FVEC:
-                return forFloatVector(key);
+                return new VectorParamParser<>(FLOAT_HANDLER, VectorParamSpecImpl.builder(key, ParamType.FVEC));
             case OTHER:
             default:
-                return forOther(key, typeStr);
+                return new ParamParser<>(
+                        ParamSpecImpl.builder(key, ParamType.OTHER)
+                                .setOtherType(typeStr));
         }
-    }
-
-    static ParamParser<?> forTrigger(String key) {
-        return new ParamParser<>(ParamSpecImpl.builder(key, ParamType.TRIGGER));
-    }
-
-    static ParamParser<?> forOther(String key, String otherType) {
-        return new ParamParser<>(
-                ParamSpecImpl.builder(key, ParamType.OTHER)
-                        .setOtherType(otherType));
-    }
-
-    static ParamParser<?> forBoolean(String key) {
-        return new BoolParamParser(SingleValueParamSpecImpl.builder(key, ParamType.BOOL));
-    }
-
-    static ParamParser<?> forString(String key, ParamType type) {
-        return new StringParamParser(StringParamSpecImpl.builder(key, type));
-    }
-
-    static ParamParser<?> forInteger(String key) {
-        return new SingleNumberParamParser<>(INTEGER_HANDLER, SingleNumberParamSpecImpl.builder(key, ParamType.INT));
-    }
-
-    static ParamParser<?> forFloat(String key) {
-        return new SingleNumberParamParser<>(FLOAT_HANDLER, SingleNumberParamSpecImpl.builder(key, ParamType.FLOAT));
-    }
-
-    static ParamParser<?> forIntegerVector(String key) {
-        return new VectorParamParser<>(INTEGER_HANDLER, VectorParamSpecImpl.builder(key, ParamType.IVEC));
-    }
-
-    static ParamParser<?> forFloatVector(String key) {
-        return new VectorParamParser<>(FLOAT_HANDLER, VectorParamSpecImpl.builder(key, ParamType.FVEC));
     }
 
     protected final B builder;
@@ -132,53 +100,6 @@ class ParamParser<B extends CommonBuilders.ParamSpecBuilder> {
             String key = ParserUtil.getRequiredString(obj, "key");
             String label = obj.getString("label", key);
             return ParamOption.create(key, label);
-        }
-    }
-
-    private static final class IntParamParser extends ParamParser<SingleNumberParamSpecImpl.Builder<Integer>> {
-
-        IntParamParser(SingleNumberParamSpecImpl.Builder<Integer> builder) {
-            super(builder);
-        }
-
-        @Override
-        protected void readObject(JsonObject obj) {
-            super.readObject(obj);
-            builder.setDefaultValue(obj.getInt("default", 0));
-            Integer minLimit = ParserUtil.getNullableInt(obj, "minLimit");
-            Integer maxLimit = ParserUtil.getNullableInt(obj, "maxLimit");
-            builder.setLimitRange(ParserUtil.makeRange(minLimit, maxLimit));
-            Integer minNorm = ParserUtil.getNullableInt(obj, "minNorm");
-            Integer maxNorm = ParserUtil.getNullableInt(obj, "maxNorm");
-            Range<Integer> normRange = ParserUtil.makeRange(minNorm, maxNorm);
-            if (normRange == null) {
-                normRange = Range.closed(0, 1);
-            }
-            builder.setNormRange(normRange);
-        }
-    }
-
-    private static final class FloatParamParser extends ParamParser<SingleNumberParamSpecImpl.Builder<Float>> {
-
-        FloatParamParser(SingleNumberParamSpecImpl.Builder<Float> builder) {
-            super(builder);
-        }
-
-        @Override
-        protected void readObject(JsonObject obj) {
-            super.readObject(obj);
-            Float defaultVal = ParserUtil.getNullableFloat(obj, "default");
-            builder.setDefaultValue(defaultVal == null ? 0 : defaultVal);
-            Float minLimit = ParserUtil.getNullableFloat(obj, "minLimit");
-            Float maxLimit = ParserUtil.getNullableFloat(obj, "maxLimit");
-            builder.setLimitRange(ParserUtil.makeRange(minLimit, maxLimit));
-            Float minNorm = ParserUtil.getNullableFloat(obj, "minNorm");
-            Float maxNorm = ParserUtil.getNullableFloat(obj, "maxNorm");
-            Range<Float> normRange = ParserUtil.makeRange(minNorm, maxNorm);
-            if (normRange == null) {
-                normRange = Range.closed(0.0f, 1.0f);
-            }
-            builder.setNormRange(normRange);
         }
     }
 
