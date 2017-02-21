@@ -14,28 +14,28 @@ import net.t3kt.tctrl.schema.ParamSpec;
   private final String key;
   private final String label;
   private final String path;
-  private final String group;
   private final ImmutableSet<String> tags;
   private final ImmutableList<ModuleSpec> children;
   private final String moduleType;
+  private final String group;
   private final ImmutableList<ParamSpec> params;
 
   private AutoValue_ModuleSpecImpl(
       String key,
       String label,
       String path,
-      String group,
       ImmutableSet<String> tags,
       ImmutableList<ModuleSpec> children,
       @Nullable String moduleType,
+      @Nullable String group,
       ImmutableList<ParamSpec> params) {
     this.key = key;
     this.label = label;
     this.path = path;
-    this.group = group;
     this.tags = tags;
     this.children = children;
     this.moduleType = moduleType;
+    this.group = group;
     this.params = params;
   }
 
@@ -55,11 +55,6 @@ import net.t3kt.tctrl.schema.ParamSpec;
   }
 
   @Override
-  public String group() {
-    return group;
-  }
-
-  @Override
   public ImmutableSet<String> tags() {
     return tags;
   }
@@ -75,6 +70,12 @@ import net.t3kt.tctrl.schema.ParamSpec;
     return moduleType;
   }
 
+  @Nullable
+  @Override
+  public String group() {
+    return group;
+  }
+
   @Override
   public ImmutableList<ParamSpec> params() {
     return params;
@@ -86,10 +87,10 @@ import net.t3kt.tctrl.schema.ParamSpec;
         + "key=" + key + ", "
         + "label=" + label + ", "
         + "path=" + path + ", "
-        + "group=" + group + ", "
         + "tags=" + tags + ", "
         + "children=" + children + ", "
         + "moduleType=" + moduleType + ", "
+        + "group=" + group + ", "
         + "params=" + params
         + "}";
   }
@@ -104,10 +105,10 @@ import net.t3kt.tctrl.schema.ParamSpec;
       return (this.key.equals(that.key()))
            && (this.label.equals(that.label()))
            && (this.path.equals(that.path()))
-           && (this.group.equals(that.group()))
            && (this.tags.equals(that.tags()))
            && (this.children.equals(that.children()))
            && ((this.moduleType == null) ? (that.moduleType() == null) : this.moduleType.equals(that.moduleType()))
+           && ((this.group == null) ? (that.group() == null) : this.group.equals(that.group()))
            && (this.params.equals(that.params()));
     }
     return false;
@@ -123,13 +124,13 @@ import net.t3kt.tctrl.schema.ParamSpec;
     h *= 1000003;
     h ^= this.path.hashCode();
     h *= 1000003;
-    h ^= this.group.hashCode();
-    h *= 1000003;
     h ^= this.tags.hashCode();
     h *= 1000003;
     h ^= this.children.hashCode();
     h *= 1000003;
     h ^= (moduleType == null) ? 0 : this.moduleType.hashCode();
+    h *= 1000003;
+    h ^= (group == null) ? 0 : this.group.hashCode();
     h *= 1000003;
     h ^= this.params.hashCode();
     return h;
@@ -139,14 +140,16 @@ import net.t3kt.tctrl.schema.ParamSpec;
     private String key;
     private String label;
     private String path;
-    private String group;
+    private ImmutableSet.Builder<String> tagsBuilder$;
     private ImmutableSet<String> tags;
     private ImmutableList.Builder<ModuleSpec> childrenBuilder$;
     private ImmutableList<ModuleSpec> children;
     private String moduleType;
+    private String group;
     private ImmutableList.Builder<ParamSpec> paramsBuilder$;
     private ImmutableList<ParamSpec> params;
     Builder() {
+      this.tags = ImmutableSet.of();
       this.children = ImmutableList.of();
       this.params = ImmutableList.of();
     }
@@ -154,10 +157,10 @@ import net.t3kt.tctrl.schema.ParamSpec;
       this.key = source.key();
       this.label = source.label();
       this.path = source.path();
-      this.group = source.group();
       this.tags = source.tags();
       this.children = source.children();
       this.moduleType = source.moduleType();
+      this.group = source.group();
       this.params = source.params();
     }
     @Override
@@ -176,14 +179,25 @@ import net.t3kt.tctrl.schema.ParamSpec;
       return this;
     }
     @Override
-    public ModuleSpecImpl.Builder setGroup(String group) {
-      this.group = group;
+    public ModuleSpecImpl.Builder setTags(ImmutableSet<String> tags) {
+      if (tagsBuilder$ != null) {
+        throw new IllegalStateException("Cannot set tags after calling tagsBuilder()");
+      }
+      this.tags = tags;
       return this;
     }
     @Override
-    public ModuleSpecImpl.Builder setTags(ImmutableSet<String> tags) {
-      this.tags = tags;
-      return this;
+    public ImmutableSet.Builder<String> tagsBuilder() {
+      if (tagsBuilder$ == null) {
+        if (tags == null) {
+          tagsBuilder$ = ImmutableSet.builder();
+        } else {
+          tagsBuilder$ = ImmutableSet.builder();
+          tagsBuilder$.addAll(tags);
+          tags = null;
+        }
+      }
+      return tagsBuilder$;
     }
     @Override
     public ModuleSpecImpl.Builder setChildren(ImmutableList<ModuleSpec> children) {
@@ -212,6 +226,11 @@ import net.t3kt.tctrl.schema.ParamSpec;
       return this;
     }
     @Override
+    public ModuleSpecImpl.Builder setGroup(@Nullable String group) {
+      this.group = group;
+      return this;
+    }
+    @Override
     public ModuleSpecImpl.Builder setParams(ImmutableList<ParamSpec> params) {
       if (paramsBuilder$ != null) {
         throw new IllegalStateException("Cannot set params after calling paramsBuilder()");
@@ -234,6 +253,9 @@ import net.t3kt.tctrl.schema.ParamSpec;
     }
     @Override
     public ModuleSpecImpl build() {
+      if (tagsBuilder$ != null) {
+        this.tags = tagsBuilder$.build();
+      }
       if (childrenBuilder$ != null) {
         this.children = childrenBuilder$.build();
       }
@@ -250,12 +272,6 @@ import net.t3kt.tctrl.schema.ParamSpec;
       if (this.path == null) {
         missing += " path";
       }
-      if (this.group == null) {
-        missing += " group";
-      }
-      if (this.tags == null) {
-        missing += " tags";
-      }
       if (!missing.isEmpty()) {
         throw new IllegalStateException("Missing required properties:" + missing);
       }
@@ -263,10 +279,10 @@ import net.t3kt.tctrl.schema.ParamSpec;
           this.key,
           this.label,
           this.path,
-          this.group,
           this.tags,
           this.children,
           this.moduleType,
+          this.group,
           this.params);
     }
   }

@@ -4,6 +4,7 @@ package net.t3kt.tctrl.schema.impl;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import javax.annotation.Generated;
+import javax.annotation.Nullable;
 import net.t3kt.tctrl.schema.ModuleSpec;
 
 @Generated("com.google.auto.value.processor.AutoValueProcessor")
@@ -12,23 +13,23 @@ import net.t3kt.tctrl.schema.ModuleSpec;
   private final String key;
   private final String label;
   private final String path;
-  private final String group;
   private final ImmutableSet<String> tags;
   private final ImmutableList<ModuleSpec> children;
+  private final String description;
 
   private AutoValue_AppSchemaImpl(
       String key,
       String label,
       String path,
-      String group,
       ImmutableSet<String> tags,
-      ImmutableList<ModuleSpec> children) {
+      ImmutableList<ModuleSpec> children,
+      @Nullable String description) {
     this.key = key;
     this.label = label;
     this.path = path;
-    this.group = group;
     this.tags = tags;
     this.children = children;
+    this.description = description;
   }
 
   @Override
@@ -47,11 +48,6 @@ import net.t3kt.tctrl.schema.ModuleSpec;
   }
 
   @Override
-  public String group() {
-    return group;
-  }
-
-  @Override
   public ImmutableSet<String> tags() {
     return tags;
   }
@@ -61,15 +57,21 @@ import net.t3kt.tctrl.schema.ModuleSpec;
     return children;
   }
 
+  @Nullable
+  @Override
+  public String description() {
+    return description;
+  }
+
   @Override
   public String toString() {
     return "AppSchemaImpl{"
         + "key=" + key + ", "
         + "label=" + label + ", "
         + "path=" + path + ", "
-        + "group=" + group + ", "
         + "tags=" + tags + ", "
-        + "children=" + children
+        + "children=" + children + ", "
+        + "description=" + description
         + "}";
   }
 
@@ -83,9 +85,9 @@ import net.t3kt.tctrl.schema.ModuleSpec;
       return (this.key.equals(that.key()))
            && (this.label.equals(that.label()))
            && (this.path.equals(that.path()))
-           && (this.group.equals(that.group()))
            && (this.tags.equals(that.tags()))
-           && (this.children.equals(that.children()));
+           && (this.children.equals(that.children()))
+           && ((this.description == null) ? (that.description() == null) : this.description.equals(that.description()));
     }
     return false;
   }
@@ -100,11 +102,11 @@ import net.t3kt.tctrl.schema.ModuleSpec;
     h *= 1000003;
     h ^= this.path.hashCode();
     h *= 1000003;
-    h ^= this.group.hashCode();
-    h *= 1000003;
     h ^= this.tags.hashCode();
     h *= 1000003;
     h ^= this.children.hashCode();
+    h *= 1000003;
+    h ^= (description == null) ? 0 : this.description.hashCode();
     return h;
   }
 
@@ -112,20 +114,22 @@ import net.t3kt.tctrl.schema.ModuleSpec;
     private String key;
     private String label;
     private String path;
-    private String group;
+    private ImmutableSet.Builder<String> tagsBuilder$;
     private ImmutableSet<String> tags;
     private ImmutableList.Builder<ModuleSpec> childrenBuilder$;
     private ImmutableList<ModuleSpec> children;
+    private String description;
     Builder() {
+      this.tags = ImmutableSet.of();
       this.children = ImmutableList.of();
     }
     private Builder(AppSchemaImpl source) {
       this.key = source.key();
       this.label = source.label();
       this.path = source.path();
-      this.group = source.group();
       this.tags = source.tags();
       this.children = source.children();
+      this.description = source.description();
     }
     @Override
     public AppSchemaImpl.Builder setKey(String key) {
@@ -143,14 +147,25 @@ import net.t3kt.tctrl.schema.ModuleSpec;
       return this;
     }
     @Override
-    public AppSchemaImpl.Builder setGroup(String group) {
-      this.group = group;
+    public AppSchemaImpl.Builder setTags(ImmutableSet<String> tags) {
+      if (tagsBuilder$ != null) {
+        throw new IllegalStateException("Cannot set tags after calling tagsBuilder()");
+      }
+      this.tags = tags;
       return this;
     }
     @Override
-    public AppSchemaImpl.Builder setTags(ImmutableSet<String> tags) {
-      this.tags = tags;
-      return this;
+    public ImmutableSet.Builder<String> tagsBuilder() {
+      if (tagsBuilder$ == null) {
+        if (tags == null) {
+          tagsBuilder$ = ImmutableSet.builder();
+        } else {
+          tagsBuilder$ = ImmutableSet.builder();
+          tagsBuilder$.addAll(tags);
+          tags = null;
+        }
+      }
+      return tagsBuilder$;
     }
     @Override
     public AppSchemaImpl.Builder setChildren(ImmutableList<ModuleSpec> children) {
@@ -174,7 +189,15 @@ import net.t3kt.tctrl.schema.ModuleSpec;
       return childrenBuilder$;
     }
     @Override
+    public AppSchemaImpl.Builder setDescription(@Nullable String description) {
+      this.description = description;
+      return this;
+    }
+    @Override
     public AppSchemaImpl build() {
+      if (tagsBuilder$ != null) {
+        this.tags = tagsBuilder$.build();
+      }
       if (childrenBuilder$ != null) {
         this.children = childrenBuilder$.build();
       }
@@ -188,12 +211,6 @@ import net.t3kt.tctrl.schema.ModuleSpec;
       if (this.path == null) {
         missing += " path";
       }
-      if (this.group == null) {
-        missing += " group";
-      }
-      if (this.tags == null) {
-        missing += " tags";
-      }
       if (!missing.isEmpty()) {
         throw new IllegalStateException("Missing required properties:" + missing);
       }
@@ -201,9 +218,9 @@ import net.t3kt.tctrl.schema.ModuleSpec;
           this.key,
           this.label,
           this.path,
-          this.group,
           this.tags,
-          this.children);
+          this.children,
+          this.description);
     }
   }
 

@@ -2,23 +2,19 @@ package net.t3kt.tctrl.schema.impl;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Range;
 import net.t3kt.tctrl.schema.ParamType;
-import net.t3kt.tctrl.schema.SingleNumberParamSpec;
+import net.t3kt.tctrl.schema.SingleValueParamSpec;
 
 @AutoValue
-public abstract class SingleNumberParamSpecImpl<T extends Comparable<T>> implements SingleNumberParamSpec<T> {
-
-    public static <T extends Comparable<T>> Builder<T> builder(String key, ParamType type) {
-        return new AutoValue_SingleNumberParamSpecImpl.Builder<T>()
+public abstract class SingleValueParamSpecImpl<T> implements SingleValueParamSpec<T> {
+    public static <T> Builder<T> builder(String key, ParamType type) {
+        return new AutoValue_SingleValueParamSpecImpl.Builder<T>()
                 .setKey(key)
                 .setType(type);
     }
 
     @AutoValue.Builder
-    public abstract static class Builder<T extends Comparable<T>> implements
-            CommonBuilders.SingleValueParamSpecBuilder<T>,
-            CommonBuilders.SingleNumberSpecBuilder<T> {
+    public abstract static class Builder<T> implements CommonBuilders.SingleValueParamSpecBuilder<T> {
         @Override
         public abstract Builder<T> setKey(String newKey);
 
@@ -54,12 +50,7 @@ public abstract class SingleNumberParamSpecImpl<T extends Comparable<T>> impleme
         @Override
         public abstract Builder<T> setDefaultValue(T newDefaultValue);
 
-        @Override
-        public abstract Builder<T> setLimitRange(Range<T> newLimitRange);
-
-        @Override
-        public abstract Builder<T> setNormRange(Range<T> newNormRange);
-
-        public abstract SingleNumberParamSpecImpl<T> build();
+        public abstract SingleValueParamSpecImpl<T> build();
     }
+
 }

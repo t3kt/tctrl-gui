@@ -11,4 +11,7 @@ public interface ParamSpec extends SchemaNode {
 
     @Nullable
     String otherType();
+
+    @Nullable
+    String group();
 }

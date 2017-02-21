@@ -9,8 +9,9 @@ import net.t3kt.tctrl.schema.ModuleSpec;
 @AutoValue
 public abstract class AppSchemaImpl implements AppSchema {
 
-    public static Builder builder() {
+    public static Builder builder(String key) {
         return new AutoValue_AppSchemaImpl.Builder()
+                .setKey(key)
                 .setChildren(ImmutableList.of())
                 .setTags(ImmutableSet.of());
     }
@@ -27,6 +28,8 @@ public abstract class AppSchemaImpl implements AppSchema {
         @Override
         public abstract Builder setPath(String newPath);
 
+        public abstract Builder setDescription(String description);
+
         @Override
         public abstract Builder setChildren(ImmutableList<ModuleSpec> newChildren);
 
@@ -37,9 +40,6 @@ public abstract class AppSchemaImpl implements AppSchema {
             childrenBuilder().add(child);
             return this;
         }
-
-        @Override
-        public abstract Builder setGroup(String newGroup);
 
         @Override
         public abstract Builder setTags(ImmutableSet<String> newTags);

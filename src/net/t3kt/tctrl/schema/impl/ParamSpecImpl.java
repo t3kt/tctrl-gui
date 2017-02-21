@@ -1,23 +1,21 @@
 package net.t3kt.tctrl.schema.impl;
 
 import com.google.auto.value.AutoValue;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import net.t3kt.tctrl.schema.ParamOption;
+import net.t3kt.tctrl.schema.ParamSpec;
 import net.t3kt.tctrl.schema.ParamType;
-import net.t3kt.tctrl.schema.StringParamSpec;
 
 @AutoValue
-public abstract class StringParamSpecImpl implements StringParamSpec {
+public abstract class ParamSpecImpl implements ParamSpec {
 
-    public static Builder builder(String key, ParamType type) {
-        return new AutoValue_StringParamSpecImpl.Builder()
+    public static ParamSpecImpl.Builder builder(String key, ParamType type) {
+        return new AutoValue_ParamSpecImpl.Builder()
                 .setKey(key)
                 .setType(type);
     }
 
     @AutoValue.Builder
-    public abstract static class Builder implements CommonBuilders.SingleValueParamSpecBuilder<String> {
+    public abstract static class Builder implements CommonBuilders.ParamSpecBuilder {
         @Override
         public abstract Builder setKey(String newKey);
 
@@ -50,11 +48,6 @@ public abstract class StringParamSpecImpl implements StringParamSpec {
         @Override
         public abstract Builder setOtherType(String newOtherType);
 
-        @Override
-        public abstract Builder setDefaultValue(String newDefaultValue);
-
-        public abstract Builder setOptions(ImmutableList<ParamOption> newOptions);
-
-        public abstract StringParamSpecImpl build();
+        public abstract ParamSpecImpl build();
     }
 }

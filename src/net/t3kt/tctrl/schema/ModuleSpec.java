@@ -8,5 +8,8 @@ public interface ModuleSpec extends BaseParentNode {
     @Nullable
     String moduleType();
 
+    @Nullable
+    String group();
+
     ImmutableList<ParamSpec> params();
 }

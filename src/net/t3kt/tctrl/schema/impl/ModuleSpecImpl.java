@@ -9,8 +9,9 @@ import net.t3kt.tctrl.schema.ParamSpec;
 @AutoValue
 public abstract class ModuleSpecImpl implements ModuleSpec {
 
-    public static Builder builder() {
+    public static Builder builder(String key) {
         return new AutoValue_ModuleSpecImpl.Builder()
+                .setKey(key)
                 .setChildren(ImmutableList.of())
                 .setTags(ImmutableSet.of())
                 .setParams(ImmutableList.of());
@@ -49,7 +50,6 @@ public abstract class ModuleSpecImpl implements ModuleSpec {
             return this;
         }
 
-        @Override
         public abstract Builder setGroup(String newGroup);
 
         @Override

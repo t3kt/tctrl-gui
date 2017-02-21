@@ -10,8 +10,10 @@ import net.t3kt.tctrl.schema.VectorParamSpec;
 @AutoValue
 public abstract class VectorParamSpecImpl<T extends Comparable<T>> implements VectorParamSpec<T> {
 
-    public static <T extends Comparable<T>> Builder<T> builder() {
-        return new AutoValue_VectorParamSpecImpl.Builder<>();
+    public static <T extends Comparable<T>> Builder<T> builder(String key, ParamType type) {
+        return new AutoValue_VectorParamSpecImpl.Builder<T>()
+                .setKey(key)
+                .setType(type);
     }
 
     @AutoValue.Builder
